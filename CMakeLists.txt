@@ -1,5 +1,6 @@
 find_package(common REQUIRED)
 find_package(dot REQUIRED)
+find_package(stduuid REQUIRED)
 
 include(floahVersionString)
 
@@ -9,6 +10,7 @@ set(INCLUDE_DIR "include/floah")
 set(SRC_DIR "src")
 
 set(HEADERS
+    ${INCLUDE_DIR}/block.h
     ${INCLUDE_DIR}/element.h
     ${INCLUDE_DIR}/layout.h
 
@@ -20,10 +22,12 @@ set(HEADERS
     ${INCLUDE_DIR}/properties/margin.h
     ${INCLUDE_DIR}/properties/size.h
 
+    ${INCLUDE_DIR}/utils/bbox.h
     ${INCLUDE_DIR}/utils/floah_error.h
 )
 
 set(SOURCES
+    ${SRC_DIR}/block.cpp
     ${SRC_DIR}/element.cpp
     ${SRC_DIR}/layout.cpp
 
@@ -35,11 +39,12 @@ set(SOURCES
     ${SRC_DIR}/properties/margin.cpp
     ${SRC_DIR}/properties/size.cpp
 
+    ${SRC_DIR}/utils/bbox.cpp
     ${SRC_DIR}/utils/floah_error.cpp
 )
 
 set(DEPS_PUBLIC
-    
+    stduuid::stduuid
 )
 
 set(DEPS_PRIVATE

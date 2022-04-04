@@ -37,4 +37,16 @@ namespace floah
     Length& Margin::getBottom() noexcept { return bottom; }
 
     const Length& Margin::getBottom() const noexcept { return bottom; }
+
+    ////////////////////////////////////////////////////////////////
+    // Setters.
+    ////////////////////////////////////////////////////////////////
+
+    void Margin::set(const int32_t l, const int32_t t, const int32_t r, const int32_t b) noexcept
+    {
+        left.set(l);
+        top.set(t);
+        right.set(r);
+        bottom.set(b);
+    }
 }  // namespace floah

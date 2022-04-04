@@ -72,6 +72,123 @@ namespace floah
     void Grid::setVerticalAlignment(const VerticalAlignment alignment) noexcept { verAlign = alignment; }
 
     ////////////////////////////////////////////////////////////////
+    // Generate.
+    ////////////////////////////////////////////////////////////////
+
+    void Grid::countBlocks(size_t& count) const noexcept
+    {
+        count++;
+        for (const auto& c : children)
+        {
+            if (c) c->countBlocks(count);
+        }
+    }
+
+    void Grid::generate(std::vector<Block>& blocks, Block& block) const
+    {
+        if (children.empty()) return;
+
+        // Count number of children.
+        for (const auto& c : children)
+        {
+            if (c) block.childCount++;
+        }
+        if (block.childCount == 0) return;
+        block.firstChild = blocks.size();
+
+        const auto& bounds = block.bounds;
+
+        // Total width is bounds.width minus left and right margin.
+        const auto boundsWidth = bounds.width();
+        const auto leftMargin  = innerMargin.getLeft().get(boundsWidth);
+        const auto rightMargin = innerMargin.getRight().get(boundsWidth);
+        const auto width       = boundsWidth - leftMargin - rightMargin;
+        const auto cellWidth   = width / static_cast<int32_t>(columnCount);
+        const auto x           = bounds.x0 + leftMargin;
+
+        // Total height is bounds.height minus top and bottom margin.
+        const auto boundsHeight = bounds.height();
+        const auto topMargin    = innerMargin.getTop().get(boundsHeight);
+        const auto bottomMargin = innerMargin.getBottom().get(boundsHeight);
+        const auto height       = boundsHeight - topMargin - bottomMargin;
+        const auto cellHeight   = height / static_cast<int32_t>(rowCount);
+        const auto y            = bounds.y0 + topMargin;
+
+        BBox childBounds;
+        for (int32_t j = 0; j < static_cast<int32_t>(rowCount); j++)
+        {
+            for (int32_t i = 0; i < static_cast<int32_t>(columnCount); i++)
+            {
+                const auto& c = children[i + j * columnCount];
+                if (!c) continue;
+
+                // Calculate absolute size of child.
+                const auto cWidth  = c->getSize().getWidth().get(width) / static_cast<int32_t>(columnCount);
+                const auto cHeight = c->getSize().getHeight().get(height) / static_cast<int32_t>(rowCount);
+
+                BBox b;
+
+                const auto center = cellWidth * i + cellWidth / 2;
+                switch (horAlign)
+                {
+                // Align to left of grid cell.
+                case HorizontalAlignment::Left:
+                    b.x0 = x + cellWidth * i + c->getOuterMargin().getLeft().get(cellWidth);
+                    b.x1 = b.x0 + cWidth;
+                    break;
+                // Align around center of grid cell.
+                case HorizontalAlignment::Center:
+                    b.x0 = x + center - (cWidth + 1) / 2;  // Add 1 so odd widths are respected.
+                    b.x1 = x + center + cWidth / 2;
+                    break;
+                // Align to right of grid cell.
+                case HorizontalAlignment::Right:
+                    b.x1 = x + cellWidth * (i + 1) - c->getOuterMargin().getRight().get(cellWidth);
+                    b.x0 = b.x1 - cWidth;
+                    break;
+                }
+
+                const auto middle = cellHeight * j + cellHeight / 2;
+                switch (verAlign)
+                {
+                // Align to top of grid cell.
+                case VerticalAlignment::Top:
+                    b.y0 = y + cellHeight * j + c->getOuterMargin().getTop().get(cellHeight);
+                    b.y1 = b.y0 + cHeight;
+                    break;
+                // Align around middle of grid cell.
+                case VerticalAlignment::Middle:
+                    b.y0 = y + middle - (cHeight + 1) / 2;  // Add 1 so odd heights are respected.
+                    b.y1 = y + middle + cHeight / 2;
+                    break;
+                // Align to bottom of grid cell.
+                case VerticalAlignment::Bottom:
+                    b.y1 = y + cellHeight * (i + 1) - c->getOuterMargin().getBottom().get(cellHeight);
+                    b.y0 = b.y1 - cWidth;
+                    break;
+                }
+
+                // Accumulate bounds of children.
+                childBounds += b;
+
+                blocks.emplace_back(c->getId(), b);
+            }
+        }
+
+        size_t offset = 0;
+        for (size_t j = 0; j < rowCount; j++)
+        {
+            for (size_t i = 0; i < columnCount; i++)
+            {
+                const auto& c = children[i + j * columnCount];
+                if (!c) continue;
+
+                c->generate(blocks, blocks[block.firstChild + offset++]);
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////
     // Rows/Cols.
     ////////////////////////////////////////////////////////////////
 

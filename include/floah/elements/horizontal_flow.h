@@ -69,13 +69,21 @@ namespace floah
          * \brief Set the horizontal alignment for child elements.
          * \param alignment Horizontal alignment.
          */
-        void setHorizontalAlignment(HorizontalAlignment alignment) noexcept;
+        void setHorizontalAlignment(HorizontalAlignment alignment);
 
         /**
          * \brief Set the vertical alignment for child elements.
          * \param alignment Vertical alignment.
          */
         void setVerticalAlignment(VerticalAlignment alignment) noexcept;
+
+        ////////////////////////////////////////////////////////////////
+        // Generate.
+        ////////////////////////////////////////////////////////////////
+
+        void countBlocks(size_t& count) const noexcept override;
+
+        void generate(std::vector<Block>& blocks, Block& block) const override;
 
         ////////////////////////////////////////////////////////////////
         // Elements.

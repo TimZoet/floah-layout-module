@@ -1,15 +1,24 @@
 #include "floah/element.h"
 
+////////////////////////////////////////////////////////////////
+// External includes.
+////////////////////////////////////////////////////////////////
+
+#include "uuid_system_generator.h"
+
 namespace floah
 {
     ////////////////////////////////////////////////////////////////
     // Constructors.
     ////////////////////////////////////////////////////////////////
 
-    Element::Element() = default;
+    Element::Element() : id(uuids::uuid_system_generator{}()) {}
 
     Element::Element(const Element& other) :
-        size(other.size), innerMargin(other.innerMargin), outerMargin(other.outerMargin)
+        id(uuids::uuid_system_generator{}()),
+        size(other.size),
+        innerMargin(other.innerMargin),
+        outerMargin(other.outerMargin)
     {
     }
 
@@ -39,6 +48,8 @@ namespace floah
     ////////////////////////////////////////////////////////////////
     // Getters.
     ////////////////////////////////////////////////////////////////
+
+    const uuids::uuid& Element::getId() const noexcept { return id; }
 
     Layout* Element::getLayout() const noexcept { return layout; }
 
@@ -75,4 +86,12 @@ namespace floah
         if (elem.layout != nullptr) elem.setLayout(nullptr);
         elem.parent = nullptr;
     }
+
+    ////////////////////////////////////////////////////////////////
+    // Generate.
+    ////////////////////////////////////////////////////////////////
+
+    void Element::countBlocks(size_t& count) const noexcept { count++; }
+
+    void Element::generate(std::vector<Block>&, Block&) const {}
 }  // namespace floah

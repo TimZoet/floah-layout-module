@@ -1,5 +1,11 @@
 #include "floah/properties/length.h"
 
+////////////////////////////////////////////////////////////////
+// Standard includes.
+////////////////////////////////////////////////////////////////
+
+#include <cmath>
+
 namespace floah
 {
     ////////////////////////////////////////////////////////////////
@@ -30,6 +36,11 @@ namespace floah
 
     float Length::getRelative() const noexcept { return relLength; }
 
+    int32_t Length::get(const int32_t base) const noexcept
+    {
+        return isRelative() ? static_cast<int32_t>(std::round(relLength * static_cast<float>(base))) : absLength;
+    }
+
     bool Length::isAbsolute() const noexcept { return !relative; }
 
     bool Length::isRelative() const noexcept { return relative; }
@@ -38,11 +49,19 @@ namespace floah
     // Setters.
     ////////////////////////////////////////////////////////////////
 
-    void Length::set(const int32_t v) { absLength = v; }
+    void Length::set(const int32_t v) noexcept
+    {
+        absLength = v;
+        relative  = false;
+    }
 
-    void Length::setRelative(const float v) { relLength = v; }
+    void Length::setRelative(const float v) noexcept
+    {
+        relLength = v;
+        relative  = true;
+    }
 
-    void Length::makeAbsolute() { relative = false; }
+    void Length::makeAbsolute() noexcept { relative = false; }
 
-    void Length::makeRelative() { relative = true; }
+    void Length::makeRelative() noexcept { relative = true; }
 }  // namespace floah

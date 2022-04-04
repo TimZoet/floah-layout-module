@@ -79,6 +79,19 @@ namespace floah
          */
         [[nodiscard]] const Length& getBottom() const noexcept;
 
+        ////////////////////////////////////////////////////////////////
+        // Setters.
+        ////////////////////////////////////////////////////////////////
+
+        /**
+         * \brief Set all margins.
+         * \param l Left.
+         * \param t Top.
+         * \param r Right.
+         * \param b Bottom.
+         */
+        void set(int32_t l, int32_t t, int32_t r, int32_t b) noexcept;
+
     private:
         ////////////////////////////////////////////////////////////////
         // Member variables.

@@ -59,6 +59,13 @@ namespace floah
         [[nodiscard]] float getRelative() const noexcept;
 
         /**
+         * \brief Get absolute length. If this object contains a relative length, convert it to an absolute length relative to base.
+         * \param base Base length to multiply relative length with.
+         * \return Absolute length.
+         */
+        [[nodiscard]] int32_t get(int32_t base) const noexcept;
+
+        /**
          * \brief Returns whether this length is absolute.
          * \return True if absolute.
          */
@@ -73,34 +80,34 @@ namespace floah
         ////////////////////////////////////////////////////////////////
         // Setters.
         ////////////////////////////////////////////////////////////////
-        
-        /**
-         * \brief Set absolute length (does not make length absolute automatically).
-         * \param v Absolute length.
-         */
-        void set(int32_t v);
 
         /**
-         * \brief Set relative length (does not make length relative automatically).
+         * \brief Set absolute length.
+         * \param v Absolute length.
+         */
+        void set(int32_t v) noexcept;
+
+        /**
+         * \brief Set relative length.
          * \param v Relative length.
          */
-        void setRelative(float v);
+        void setRelative(float v) noexcept;
 
         /**
          * \brief Use absolute length value.
          */
-        void makeAbsolute();
+        void makeAbsolute() noexcept;
 
         /**
          * \brief Use relative length value.
          */
-        void makeRelative();
+        void makeRelative() noexcept;
 
     private:
         ////////////////////////////////////////////////////////////////
         // Member variables.
         ////////////////////////////////////////////////////////////////
-        
+
         /**
          * \brief Whether absLength or relLength is used.
          */
