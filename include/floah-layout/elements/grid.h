@@ -11,8 +11,8 @@
 // Current target includes.
 ////////////////////////////////////////////////////////////////
 
-#include "floah/element.h"
-#include "floah/properties/alignment.h"
+#include "floah-layout/element.h"
+#include "floah-layout/properties/alignment.h"
 
 namespace floah
 {

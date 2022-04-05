@@ -12,9 +12,9 @@
 // Current target includes.
 ////////////////////////////////////////////////////////////////
 
-#include "floah/block.h"
-#include "floah/element.h"
-#include "floah/properties/size.h"
+#include "floah-layout/block.h"
+#include "floah-layout/element.h"
+#include "floah-layout/properties/size.h"
 
 namespace floah
 {

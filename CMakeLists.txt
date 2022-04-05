@@ -4,9 +4,9 @@ find_package(stduuid REQUIRED)
 
 include(floahVersionString)
 
-set(NAME floah)
+set(NAME floah-layout)
 set(TYPE module)
-set(INCLUDE_DIR "include/floah")
+set(INCLUDE_DIR "include/floah-layout")
 set(SRC_DIR "src")
 
 set(HEADERS

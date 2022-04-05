@@ -14,7 +14,7 @@
 // Current target includes.
 ////////////////////////////////////////////////////////////////
 
-#include "floah/utils/bbox.h"
+#include "floah-layout/utils/bbox.h"
 
 namespace floah
 {
