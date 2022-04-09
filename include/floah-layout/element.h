@@ -26,6 +26,7 @@ namespace floah
     class Element;
 
     using ElementPtr = std::unique_ptr<Element>;
+    using LayoutPtr = std::unique_ptr<Layout>;
 
     class Element
     {

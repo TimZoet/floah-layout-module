@@ -45,6 +45,10 @@ namespace floah
 
         [[nodiscard]] const Size& getSize() const noexcept;
 
+         [[nodiscard]] Size& getOffset() noexcept;
+
+        [[nodiscard]] const Size& getOffset() const noexcept;
+
         [[nodiscard]] Element* getRootElement() const noexcept;
 
         ////////////////////////////////////////////////////////////////
@@ -73,6 +77,8 @@ namespace floah
         ////////////////////////////////////////////////////////////////
 
         Size size;
+
+        Size offset;
 
         ElementPtr root;
     };
