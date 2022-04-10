@@ -119,7 +119,6 @@ namespace floah
         case VerticalAlignment::Bottom: y = bounds.y1 - bottomMargin;
         }
 
-        BBox childBounds;
         for (const auto& c : children)
         {
             // Calculate absolute size of child.
@@ -164,13 +163,8 @@ namespace floah
                 break;
             }
 
-            // Accumulate bounds of children.
-            childBounds += b;
-
             blocks.emplace_back(c->getId(), b);
         }
-
-        block.childBounds = childBounds;
 
         for (size_t i = 0; i < children.size(); i++) { children[i]->generate(blocks, blocks[block.firstChild + i]); }
     }

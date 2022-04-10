@@ -114,7 +114,6 @@ namespace floah
         const auto cellHeight   = height / static_cast<int32_t>(rowCount);
         const auto y            = bounds.y0 + topMargin;
 
-        BBox childBounds;
         for (int32_t j = 0; j < static_cast<int32_t>(rowCount); j++)
         {
             for (int32_t i = 0; i < static_cast<int32_t>(columnCount); i++)
@@ -167,9 +166,6 @@ namespace floah
                     b.y0 = b.y1 - cWidth;
                     break;
                 }
-
-                // Accumulate bounds of children.
-                childBounds += b;
 
                 blocks.emplace_back(c->getId(), b);
             }

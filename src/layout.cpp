@@ -60,6 +60,19 @@ namespace floah
         auto& block = blocks.emplace_back(root->getId(), bb);
         root->generate(blocks, block);
 
+        // Accumulate bounds of child elements.
+        std::function<BBox(const size_t)> func = [&blocks, &func](const size_t i) -> BBox {
+            auto& block = blocks[i];
+
+            BBox bounds = block.bounds;
+            for (size_t j = 0; j < block.childCount; j++) bounds += func(block.firstChild + j);
+
+            block.childBounds = bounds;
+
+            return bounds;
+        };
+        static_cast<void>(func(0));
+
         return blocks;
     }
 
