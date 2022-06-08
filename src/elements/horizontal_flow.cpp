@@ -15,7 +15,7 @@ namespace floah
     HorizontalFlow::HorizontalFlow() = default;
 
     HorizontalFlow::HorizontalFlow(const HorizontalFlow& other) :
-        Element(other), horAlign(other.horAlign), verAlign(other.verAlign)
+        LayoutElement(other), horAlign(other.horAlign), verAlign(other.verAlign)
     {
     }
 
@@ -23,13 +23,13 @@ namespace floah
 
     HorizontalFlow& HorizontalFlow::operator=(const HorizontalFlow& other)
     {
-        Element::operator=(other);
+        LayoutElement::operator=(other);
         horAlign         = other.horAlign;
         verAlign         = other.verAlign;
         return *this;
     }
 
-    ElementPtr HorizontalFlow::clone(Layout* l, Element* p) const
+    LayoutElementPtr HorizontalFlow::clone(Layout* l, LayoutElement* p) const
     {
         auto elem = std::make_unique<HorizontalFlow>(*this);
         elem->cloneImpl(l, p);
@@ -56,8 +56,8 @@ namespace floah
 
     void HorizontalFlow::setLayout(Layout* l) noexcept
     {
-        Element::setLayout(l);
-        for (auto& c : children) Element::setLayout(l, *c);
+        LayoutElement::setLayout(l);
+        for (auto& c : children) LayoutElement::setLayout(l, *c);
     }
 
     void HorizontalFlow::setHorizontalAlignment(const HorizontalAlignment alignment)
@@ -173,7 +173,7 @@ namespace floah
     // Elements.
     ////////////////////////////////////////////////////////////////
 
-    Element& HorizontalFlow::get(const size_t index) const
+    LayoutElement& HorizontalFlow::get(const size_t index) const
     {
         if (index >= children.size()) throw FloahError("Cannot get element. Index is out of range.");
 
@@ -187,7 +187,7 @@ namespace floah
         children.erase(children.begin() + index);
     }
 
-    ElementPtr HorizontalFlow::extract(const size_t index)
+    LayoutElementPtr HorizontalFlow::extract(const size_t index)
     {
         if (index >= children.size()) throw FloahError("Cannot extract element. Index is out of range.");
 
@@ -197,15 +197,15 @@ namespace floah
         return elem;
     }
 
-    void HorizontalFlow::appendImpl(ElementPtr elem)
+    void HorizontalFlow::appendImpl(LayoutElementPtr elem)
     {
         makeChild(*elem);
         children.push_back(std::move(elem));
     }
 
-    void HorizontalFlow::prependImpl(ElementPtr elem) { insertImpl(std::move(elem), 0); }
+    void HorizontalFlow::prependImpl(LayoutElementPtr elem) { insertImpl(std::move(elem), 0); }
 
-    void HorizontalFlow::insertImpl(ElementPtr elem, const size_t index)
+    void HorizontalFlow::insertImpl(LayoutElementPtr elem, const size_t index)
     {
         makeChild(*elem);
         children.insert(children.begin() + std::min(children.size(), index), std::move(elem));

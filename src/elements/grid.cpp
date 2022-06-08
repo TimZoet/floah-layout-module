@@ -14,19 +14,19 @@ namespace floah
 
     Grid::Grid() = default;
 
-    Grid::Grid(const Grid& other) : Element(other), horAlign(other.horAlign), verAlign(other.verAlign) {}
+    Grid::Grid(const Grid& other) : LayoutElement(other), horAlign(other.horAlign), verAlign(other.verAlign) {}
 
     Grid::~Grid() noexcept = default;
 
     Grid& Grid::operator=(const Grid& other)
     {
-        Element::operator=(other);
+        LayoutElement::operator=(other);
         horAlign         = other.horAlign;
         verAlign         = other.verAlign;
         return *this;
     }
 
-    ElementPtr Grid::clone(Layout* l, Element* p) const
+    LayoutElementPtr Grid::clone(Layout* l, LayoutElement* p) const
     {
         auto elem = std::make_unique<Grid>(*this);
         elem->cloneImpl(l, p);
@@ -60,10 +60,10 @@ namespace floah
 
     void Grid::setLayout(Layout* l) noexcept
     {
-        Element::setLayout(l);
+        LayoutElement::setLayout(l);
         for (auto& c : children)
         {
-            if (c) Element::setLayout(l, *c);
+            if (c) LayoutElement::setLayout(l, *c);
         }
     }
 
@@ -288,11 +288,11 @@ namespace floah
         children.resize(rowCount * columnCount);
     }
 
-    std::vector<ElementPtr> Grid::extractRow(const size_t y)
+    std::vector<LayoutElementPtr> Grid::extractRow(const size_t y)
     {
         if (y >= rowCount) throw FloahError("Cannot extract row. Index is out of range.");
 
-        std::vector<ElementPtr> elems;
+        std::vector<LayoutElementPtr> elems;
         elems.reserve(columnCount);
 
         for (size_t x = 0; x < columnCount; x++) elems.push_back(std::move(*(children.begin() + y * columnCount + x)));
@@ -308,11 +308,11 @@ namespace floah
         return elems;
     }
 
-    std::vector<ElementPtr> Grid::extractColumn(const size_t x)
+    std::vector<LayoutElementPtr> Grid::extractColumn(const size_t x)
     {
         if (x >= columnCount) throw FloahError("Cannot extract column. Index is out of range.");
 
-        std::vector<ElementPtr> elems;
+        std::vector<LayoutElementPtr> elems;
         elems.reserve(rowCount);
 
         columnCount--;
@@ -371,7 +371,7 @@ namespace floah
     // Elements.
     ////////////////////////////////////////////////////////////////
 
-    Element* Grid::get(const size_t x, const size_t y)
+    LayoutElement* Grid::get(const size_t x, const size_t y)
     {
         if (x >= columnCount || y >= rowCount) throw FloahError("Cannot get element. Index is out of range.");
 
@@ -385,7 +385,7 @@ namespace floah
         children[x + y * columnCount].reset();
     }
 
-    ElementPtr Grid::extract(const size_t x, const size_t y)
+    LayoutElementPtr Grid::extract(const size_t x, const size_t y)
     {
         if (x >= columnCount || y >= rowCount) throw FloahError("Cannot extract element. Index is out of range.");
 
@@ -394,7 +394,7 @@ namespace floah
         return elem;
     }
 
-    void Grid::insertImpl(ElementPtr elem, const size_t x, const size_t y)
+    void Grid::insertImpl(LayoutElementPtr elem, const size_t x, const size_t y)
     {
         if (x >= columnCount || y >= rowCount) throw FloahError("Cannot insert element. Index is out of range.");
 

@@ -11,12 +11,12 @@
 // Current target includes.
 ////////////////////////////////////////////////////////////////
 
-#include "floah-layout/element.h"
+#include "floah-layout/layout_element.h"
 #include "floah-layout/properties/alignment.h"
 
 namespace floah
 {
-    class Grid final : public Element
+    class Grid final : public LayoutElement
     {
     public:
         ////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ namespace floah
 
         Grid& operator=(Grid&&) noexcept = delete;
 
-        [[nodiscard]] ElementPtr clone(Layout* l, Element* p) const override;
+        [[nodiscard]] LayoutElementPtr clone(Layout* l, LayoutElement* p) const override;
 
         ////////////////////////////////////////////////////////////////
         // Getters.
@@ -144,14 +144,14 @@ namespace floah
          * \param y Row index.
          * \return List of elements (can contain nullptrs when there was no element at each position).
          */
-        std::vector<ElementPtr> extractRow(size_t y);
+        std::vector<LayoutElementPtr> extractRow(size_t y);
 
         /**
          * \brief Remove column at x and all elements in it, and return the list of elements. All elements with x-index > x are shifted left.
          * \param x Column index.
          * \return List of elements (can contain nullptrs when there was no element at each position).
          */
-        std::vector<ElementPtr> extractColumn(size_t x);
+        std::vector<LayoutElementPtr> extractColumn(size_t x);
 
         // TODO: Come up with better name, perhaps create various clear/reset methods in base class?
         void removeAllRowsAndColumns();
@@ -166,7 +166,7 @@ namespace floah
          * \param y Row index.
          * \return Element or nullptr if no element was inserted.
          */
-        Element* get(size_t x, size_t y);
+        LayoutElement* get(size_t x, size_t y);
 
         /**
          * \brief Insert an element at (x, y). Replaces existing element, if any.
@@ -176,7 +176,7 @@ namespace floah
          * \param y Row index.
          * \return Element.
          */
-        template<std::derived_from<Element> T>
+        template<std::derived_from<LayoutElement> T>
         T& insert(std::unique_ptr<T> elem, const size_t x, const size_t y)
         {
             assert(elem);
@@ -198,10 +198,10 @@ namespace floah
          * \param y Row index.
          * \return Removed element (nullptr when there was no element at (x, y)).
          */
-        [[nodiscard]] ElementPtr extract(size_t x, size_t y);
+        [[nodiscard]] LayoutElementPtr extract(size_t x, size_t y);
 
     private:
-        void insertImpl(ElementPtr elem, size_t x, size_t y);
+        void insertImpl(LayoutElementPtr elem, size_t x, size_t y);
 
         /**
          * \brief Horizontal alignment.
@@ -226,6 +226,6 @@ namespace floah
         /**
          * \brief Row-major list of child elements.
          */
-        std::vector<ElementPtr> children;
+        std::vector<LayoutElementPtr> children;
     };
 }  // namespace floah

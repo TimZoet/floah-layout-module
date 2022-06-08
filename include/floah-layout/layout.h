@@ -13,7 +13,7 @@
 ////////////////////////////////////////////////////////////////
 
 #include "floah-layout/block.h"
-#include "floah-layout/element.h"
+#include "floah-layout/layout_element.h"
 #include "floah-layout/properties/size.h"
 
 namespace floah
@@ -49,13 +49,13 @@ namespace floah
 
         [[nodiscard]] const Size& getOffset() const noexcept;
 
-        [[nodiscard]] Element* getRootElement() const noexcept;
+        [[nodiscard]] LayoutElement* getRootElement() const noexcept;
 
         ////////////////////////////////////////////////////////////////
         // Setters.
         ////////////////////////////////////////////////////////////////
 
-        template<std::derived_from<Element> T>
+        template<std::derived_from<LayoutElement> T>
         T& setRoot(std::unique_ptr<T> elem)
         {
             assert(elem);
@@ -80,6 +80,6 @@ namespace floah
 
         Size offset;
 
-        ElementPtr root;
+        LayoutElementPtr root;
     };
 }  // namespace floah

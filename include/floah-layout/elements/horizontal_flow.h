@@ -11,12 +11,12 @@
 // Current target includes.
 ////////////////////////////////////////////////////////////////
 
-#include "floah-layout/element.h"
+#include "floah-layout/layout_element.h"
 #include "floah-layout/properties/alignment.h"
 
 namespace floah
 {
-    class HorizontalFlow final : public Element
+    class HorizontalFlow final : public LayoutElement
     {
     public:
         ////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ namespace floah
 
         HorizontalFlow& operator=(HorizontalFlow&&) noexcept = delete;
 
-        [[nodiscard]] ElementPtr clone(Layout* l, Element* p) const override;
+        [[nodiscard]] LayoutElementPtr clone(Layout* l, LayoutElement* p) const override;
 
         ////////////////////////////////////////////////////////////////
         // Getters.
@@ -94,7 +94,7 @@ namespace floah
          * \param index Index.
          * \return Element.
          */
-        [[nodiscard]] Element& get(size_t index) const;
+        [[nodiscard]] LayoutElement& get(size_t index) const;
 
         /**
          * \brief Add an element to the end.
@@ -102,7 +102,7 @@ namespace floah
          * \param elem Element.
          * \return Element.
          */
-        template<std::derived_from<Element> T>
+        template<std::derived_from<LayoutElement> T>
         T& append(std::unique_ptr<T> elem)
         {
             assert(elem);
@@ -117,7 +117,7 @@ namespace floah
          * \param elem Element.
          * \return Element.
          */
-        template<std::derived_from<Element> T>
+        template<std::derived_from<LayoutElement> T>
         T& prepend(std::unique_ptr<T> elem)
         {
             assert(elem);
@@ -133,7 +133,7 @@ namespace floah
          * \param index Index.
          * \return Element.
          */
-        template<std::derived_from<Element> T>
+        template<std::derived_from<LayoutElement> T>
         T& insert(std::unique_ptr<T> elem, const size_t index)
         {
             assert(elem);
@@ -153,14 +153,14 @@ namespace floah
          * \param index Index.
          * \return Removed element.
          */
-        [[nodiscard]] ElementPtr extract(size_t index);
+        [[nodiscard]] LayoutElementPtr extract(size_t index);
 
     private:
-        void appendImpl(ElementPtr elem);
+        void appendImpl(LayoutElementPtr elem);
 
-        void prependImpl(ElementPtr elem);
+        void prependImpl(LayoutElementPtr elem);
 
-        void insertImpl(ElementPtr elem, size_t index);
+        void insertImpl(LayoutElementPtr elem, size_t index);
 
         /**
          * \brief Horizontal alignment.
@@ -175,6 +175,6 @@ namespace floah
         /**
          * \brief List of child elements.
          */
-        std::vector<ElementPtr> children;
+        std::vector<LayoutElementPtr> children;
     };
 }  // namespace floah

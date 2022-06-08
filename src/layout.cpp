@@ -28,7 +28,7 @@ namespace floah
 
     const Size& Layout::getOffset() const noexcept { return offset; }
 
-    Element* Layout::getRootElement() const noexcept { return root.get(); }
+    LayoutElement* Layout::getRootElement() const noexcept { return root.get(); }
 
     ////////////////////////////////////////////////////////////////
     // ...

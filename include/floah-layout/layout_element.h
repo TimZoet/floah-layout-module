@@ -23,12 +23,12 @@
 namespace floah
 {
     class Layout;
-    class Element;
+    class LayoutElement;
 
-    using ElementPtr = std::unique_ptr<Element>;
-    using LayoutPtr = std::unique_ptr<Layout>;
+    using LayoutElementPtr = std::unique_ptr<LayoutElement>;
+    using LayoutPtr        = std::unique_ptr<Layout>;
 
-    class Element
+    class LayoutElement
     {
         friend class Layout;
 
@@ -37,17 +37,17 @@ namespace floah
         // Constructors.
         ////////////////////////////////////////////////////////////////
 
-        Element();
+        LayoutElement();
 
-        Element(const Element&);
+        LayoutElement(const LayoutElement&);
 
-        Element(Element&&) noexcept = delete;
+        LayoutElement(LayoutElement&&) noexcept = delete;
 
-        virtual ~Element() noexcept;
+        virtual ~LayoutElement() noexcept;
 
-        Element& operator=(const Element&);
+        LayoutElement& operator=(const LayoutElement&);
 
-        Element& operator=(Element&&) noexcept = delete;
+        LayoutElement& operator=(LayoutElement&&) noexcept = delete;
 
         /**
          * \brief Clone this element to a new layout and/or parent element.
@@ -55,10 +55,10 @@ namespace floah
          * \param p Parent element.
          * \return Cloned element.
          */
-        [[nodiscard]] virtual ElementPtr clone(Layout* l, Element* p) const;
+        [[nodiscard]] virtual LayoutElementPtr clone(Layout* l, LayoutElement* p) const;
 
     protected:
-        virtual void cloneImpl(Layout* l, Element* p);
+        virtual void cloneImpl(Layout* l, LayoutElement* p);
 
     public:
         ////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ namespace floah
 
         [[nodiscard]] Layout* getLayout() const noexcept;
 
-        [[nodiscard]] Element* getParent() const noexcept;
+        [[nodiscard]] LayoutElement* getParent() const noexcept;
 
         [[nodiscard]] Size& getSize() noexcept;
 
@@ -94,19 +94,19 @@ namespace floah
          */
         virtual void setLayout(Layout* l) noexcept;
 
-        void setLayout(Layout* l, Element& elem) noexcept;
+        void setLayout(Layout* l, LayoutElement& elem) noexcept;
 
         /**
          * \brief Make other element a child of this element.
          * \param elem Other element.
          */
-        void makeChild(Element& elem);
+        void makeChild(LayoutElement& elem);
 
         /**
          * \brief Remove this element as parent of other element.
          * \param elem Other element.
          */
-        void removeChild(Element& elem);
+        void removeChild(LayoutElement& elem);
 
     public:
         ////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ namespace floah
 
         Layout* layout = nullptr;
 
-        Element* parent = nullptr;
+        LayoutElement* parent = nullptr;
 
         Size size;
 
