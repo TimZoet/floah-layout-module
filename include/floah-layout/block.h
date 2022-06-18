@@ -1,10 +1,6 @@
 #pragma once
 
 ////////////////////////////////////////////////////////////////
-// Standard includes.
-////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////
 // External includes.
 ////////////////////////////////////////////////////////////////
 
@@ -21,17 +17,17 @@ namespace floah
     struct Block
     {
         /**
-         * \brief Element identifier.
+         * \brief Identifier of layout element from which this block was generated. Note that an element may generate multiple blocks.
          */
         uuids::uuid id;
 
         /**
-         * \brief Bounds of element.
+         * \brief Bounds of layout element.
          */
         BBox bounds;
 
         /**
-         * \brief Union of bounds of element and all its children.
+         * \brief Union of bounds of layout element and all its children. If children are outside of bounds, these childBounds can be larger than the bounds.
          */
         BBox childBounds;
 

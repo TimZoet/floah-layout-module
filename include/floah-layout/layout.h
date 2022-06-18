@@ -41,14 +41,34 @@ namespace floah
         // Getters.
         ////////////////////////////////////////////////////////////////
 
+        /**
+         * \brief Get the absolute size of the layout.
+         * \return Absolute size.
+         */
         [[nodiscard]] Size& getSize() noexcept;
 
+        /**
+         * \brief Get the absolute size of the layout.
+         * \return Absolute size.
+         */
         [[nodiscard]] const Size& getSize() const noexcept;
 
-         [[nodiscard]] Size& getOffset() noexcept;
+        /**
+         * \brief Get the absolute offset of the layout.
+         * \return Absolute offset.
+         */
+        [[nodiscard]] Size& getOffset() noexcept;
 
+        /**
+         * \brief Get the absolute offset of the layout.
+         * \return Absolute offset.
+         */
         [[nodiscard]] const Size& getOffset() const noexcept;
 
+        /**
+         * \brief Get the root layout element.
+         * \return LayoutElement or nullptr.
+         */
         [[nodiscard]] LayoutElement* getRootElement() const noexcept;
 
         ////////////////////////////////////////////////////////////////
