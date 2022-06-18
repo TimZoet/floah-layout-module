@@ -10,7 +10,7 @@
 // Current target includes.
 ////////////////////////////////////////////////////////////////
 
-#include "floah-layout/utils/bbox.h"
+#include "floah-common/bbox.h"
 
 namespace floah
 {

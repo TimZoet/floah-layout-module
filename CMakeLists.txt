@@ -16,14 +16,6 @@ set(HEADERS
 
     ${INCLUDE_DIR}/elements/grid.h
     ${INCLUDE_DIR}/elements/horizontal_flow.h
-
-    ${INCLUDE_DIR}/properties/alignment.h
-    ${INCLUDE_DIR}/properties/length.h
-    ${INCLUDE_DIR}/properties/margin.h
-    ${INCLUDE_DIR}/properties/size.h
-
-    ${INCLUDE_DIR}/utils/bbox.h
-    ${INCLUDE_DIR}/utils/floah_error.h
 )
 
 set(SOURCES
@@ -33,17 +25,10 @@ set(SOURCES
 
     ${SRC_DIR}/elements/grid.cpp
     ${SRC_DIR}/elements/horizontal_flow.cpp
-
-    ${SRC_DIR}/properties/alignment.cpp
-    ${SRC_DIR}/properties/length.cpp
-    ${SRC_DIR}/properties/margin.cpp
-    ${SRC_DIR}/properties/size.cpp
-
-    ${SRC_DIR}/utils/bbox.cpp
-    ${SRC_DIR}/utils/floah_error.cpp
 )
 
 set(DEPS_PUBLIC
+    floah-common
     stduuid::stduuid
 )
 

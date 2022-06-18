@@ -17,8 +17,8 @@
 ////////////////////////////////////////////////////////////////
 
 #include "floah-layout/block.h"
-#include "floah-layout/properties/margin.h"
-#include "floah-layout/properties/size.h"
+#include "floah-common/margin.h"
+#include "floah-common/size.h"
 
 namespace floah
 {

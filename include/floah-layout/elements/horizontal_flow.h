@@ -12,7 +12,7 @@
 ////////////////////////////////////////////////////////////////
 
 #include "floah-layout/layout_element.h"
-#include "floah-layout/properties/alignment.h"
+#include "floah-common/alignment.h"
 
 namespace floah
 {

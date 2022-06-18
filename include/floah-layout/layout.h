@@ -14,7 +14,7 @@
 
 #include "floah-layout/block.h"
 #include "floah-layout/layout_element.h"
-#include "floah-layout/properties/size.h"
+#include "floah-common/size.h"
 
 namespace floah
 {
