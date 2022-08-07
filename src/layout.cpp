@@ -53,7 +53,7 @@ namespace floah
         const auto left   = root->getOuterMargin().getLeft().get(size.getWidth().get()) + offset.getWidth().get();
         const auto top    = root->getOuterMargin().getTop().get(size.getHeight().get()) + offset.getHeight().get();
         const auto width  = root->getSize().getWidth().get(size.getWidth().get());
-        const auto height = root->getSize().getWidth().get(size.getHeight().get());
+        const auto height = root->getSize().getHeight().get(size.getHeight().get());
         const BBox bb{.x0 = left, .y0 = top, .x1 = left + width, .y1 = top + height};
 
         // Create root block and recurse on children.
