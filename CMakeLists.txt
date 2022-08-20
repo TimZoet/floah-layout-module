@@ -16,6 +16,7 @@ set(HEADERS
 
     ${INCLUDE_DIR}/elements/grid.h
     ${INCLUDE_DIR}/elements/horizontal_flow.h
+    ${INCLUDE_DIR}/elements/vertical_flow.h
 )
 
 set(SOURCES
@@ -25,6 +26,7 @@ set(SOURCES
 
     ${SRC_DIR}/elements/grid.cpp
     ${SRC_DIR}/elements/horizontal_flow.cpp
+    ${SRC_DIR}/elements/vertical_flow.cpp
 )
 
 set(DEPS_PUBLIC

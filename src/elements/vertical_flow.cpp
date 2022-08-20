@@ -1,4 +1,4 @@
-#include "floah-layout/elements/horizontal_flow.h"
+#include "floah-layout/elements/vertical_flow.h"
 
 ////////////////////////////////////////////////////////////////
 // Current target includes.
@@ -12,26 +12,26 @@ namespace floah
     // Constructors.
     ////////////////////////////////////////////////////////////////
 
-    HorizontalFlow::HorizontalFlow() = default;
+    VerticalFlow::VerticalFlow() = default;
 
-    HorizontalFlow::HorizontalFlow(const HorizontalFlow& other) :
+    VerticalFlow::VerticalFlow(const VerticalFlow& other) :
         LayoutElement(other), horAlign(other.horAlign), verAlign(other.verAlign)
     {
     }
 
-    HorizontalFlow::~HorizontalFlow() noexcept = default;
+    VerticalFlow::~VerticalFlow() noexcept = default;
 
-    HorizontalFlow& HorizontalFlow::operator=(const HorizontalFlow& other)
+    VerticalFlow& VerticalFlow::operator=(const VerticalFlow& other)
     {
         LayoutElement::operator=(other);
-        horAlign         = other.horAlign;
-        verAlign         = other.verAlign;
+        horAlign               = other.horAlign;
+        verAlign               = other.verAlign;
         return *this;
     }
 
-    LayoutElementPtr HorizontalFlow::clone(Layout* l, LayoutElement* p) const
+    LayoutElementPtr VerticalFlow::clone(Layout* l, LayoutElement* p) const
     {
-        auto elem = std::make_unique<HorizontalFlow>(*this);
+        auto elem = std::make_unique<VerticalFlow>(*this);
         elem->cloneImpl(l, p);
 
         elem->children.reserve(children.size());
@@ -44,42 +44,42 @@ namespace floah
     // Getters.
     ////////////////////////////////////////////////////////////////
 
-    HorizontalAlignment HorizontalFlow::getHorizontalAlignment() const noexcept { return horAlign; }
+    HorizontalAlignment VerticalFlow::getHorizontalAlignment() const noexcept { return horAlign; }
 
-    VerticalAlignment HorizontalFlow::getVerticalAlignment() const noexcept { return verAlign; }
+    VerticalAlignment VerticalFlow::getVerticalAlignment() const noexcept { return verAlign; }
 
-    size_t HorizontalFlow::getChildCount() const noexcept { return children.size(); }
+    size_t VerticalFlow::getChildCount() const noexcept { return children.size(); }
 
     ////////////////////////////////////////////////////////////////
     // Setters.
     ////////////////////////////////////////////////////////////////
 
-    void HorizontalFlow::setLayout(Layout* l) noexcept
+    void VerticalFlow::setLayout(Layout* l) noexcept
     {
         LayoutElement::setLayout(l);
         for (auto& c : children) LayoutElement::setLayout(l, *c);
     }
 
-    void HorizontalFlow::setHorizontalAlignment(const HorizontalAlignment alignment)
-    {
-        if (alignment == HorizontalAlignment::Center)
-            throw FloahError("Cannot set alignment. Center not supported for horizontal alignment.");
-        horAlign = alignment;
-    }
+    void VerticalFlow::setHorizontalAlignment(const HorizontalAlignment alignment) noexcept { horAlign = alignment; }
 
-    void HorizontalFlow::setVerticalAlignment(const VerticalAlignment alignment) noexcept { verAlign = alignment; }
+    void VerticalFlow::setVerticalAlignment(const VerticalAlignment alignment)
+    {
+        if (alignment == VerticalAlignment::Middle)
+            throw FloahError("Cannot set alignment. Middle not supported for vertical alignment.");
+        verAlign = alignment;
+    }
 
     ////////////////////////////////////////////////////////////////
     // Generate.
     ////////////////////////////////////////////////////////////////
 
-    void HorizontalFlow::countBlocks(size_t& count) const noexcept
+    void VerticalFlow::countBlocks(size_t& count) const noexcept
     {
         count++;
         for (const auto& c : children) c->countBlocks(count);
     }
 
-    void HorizontalFlow::generate(std::vector<Block>& blocks, Block& block) const
+    void VerticalFlow::generate(std::vector<Block>& blocks, Block& block) const
     {
         if (children.empty()) return;
 
@@ -100,23 +100,23 @@ namespace floah
         const auto bottomMargin = innerMargin.getBottom().get(boundsHeight);
         const auto height       = boundsHeight - topMargin - bottomMargin;
 
-        // Start at left or right of bounds.
-        int32_t x = 0;
-        switch (horAlign)
-        {
-        case HorizontalAlignment::Left: x = bounds.x0 + leftMargin; break;
-        case HorizontalAlignment::Center:
-            throw FloahError("Cannot generate. Center not supported for horizontal alignment.");
-        case HorizontalAlignment::Right: x = bounds.x1 - rightMargin;
-        }
-
-        // Offset from top or bottom of bounds, or center around horizontal axis.
+        // Start at top or bottom of bounds.
         int32_t y = 0;
         switch (verAlign)
         {
         case VerticalAlignment::Top: y = bounds.y0 + topMargin; break;
-        case VerticalAlignment::Middle: y = (bounds.y0 + topMargin + bounds.y1 - bottomMargin) / 2; break;
+        case VerticalAlignment::Middle:
+            throw FloahError("Cannot generate. Middle not supported for vertical alignment.");
         case VerticalAlignment::Bottom: y = bounds.y1 - bottomMargin;
+        }
+
+        // Offset from left or right of bounds, or center around vertical axis.
+        int32_t x = 0;
+        switch (horAlign)
+        {
+        case HorizontalAlignment::Left: x = bounds.x0 + leftMargin; break;
+        case HorizontalAlignment::Center: x = (bounds.x0 + leftMargin + bounds.x1 - rightMargin) / 2; break;
+        case HorizontalAlignment::Right: x = bounds.x1 - rightMargin;
         }
 
         for (const auto& c : children)
@@ -127,39 +127,39 @@ namespace floah
 
             BBox b;
 
-            switch (horAlign)
-            {
-            // Append to right of elements and move x further right.
-            case HorizontalAlignment::Left:
-                b.x0 = x + c->getOuterMargin().getLeft().get(width);
-                b.x1 = b.x0 + cWidth;
-                x    = b.x1 + c->getOuterMargin().getRight().get(width);
-                break;
-            case HorizontalAlignment::Center: break;
-            // Append to left of elements and move x further left.
-            case HorizontalAlignment::Right:
-                b.x1 = x - c->getOuterMargin().getRight().get(width);
-                b.x0 = b.x1 - cWidth;
-                x    = b.x0 - c->getOuterMargin().getLeft().get(width);
-                break;
-            }
-
             switch (verAlign)
             {
-            // Offset from top of parent.
+            // Append to bottom of elements and move y further down.
             case VerticalAlignment::Top:
                 b.y0 = y + c->getOuterMargin().getTop().get(height);
                 b.y1 = b.y0 + cHeight;
+                y    = b.y1 + c->getOuterMargin().getBottom().get(height);
                 break;
-            // Center around middle of parent.
-            case VerticalAlignment::Middle:
-                b.y0 = y - (cHeight + 1) / 2;  // Add 1 so odd heights are respected.
-                b.y1 = y + cHeight / 2;
-                break;
-            // Offset from bottom of parent.
+            case VerticalAlignment::Middle: break;
+            // Append to top of elements and move y further up.
             case VerticalAlignment::Bottom:
                 b.y1 = y - c->getOuterMargin().getBottom().get(height);
-                b.y0 = b.y0 - cHeight;
+                b.y0 = b.y1 - cHeight;
+                y    = b.y0 - c->getOuterMargin().getTop().get(height);
+                break;
+            }
+
+            switch (horAlign)
+            {
+            // Offset from left of parent.
+            case HorizontalAlignment::Left:
+                b.x0 = x + c->getOuterMargin().getLeft().get(width);
+                b.x1 = b.x0 + cWidth;
+                break;
+            // Center around middle of parent.
+            case HorizontalAlignment::Center:
+                b.x0 = x - (cWidth + 1) / 2;  // Add 1 so odd widths are respected.
+                b.x1 = x + cWidth / 2;
+                break;
+            // Offset from right of parent.
+            case HorizontalAlignment::Right:
+                b.x1 = x - c->getOuterMargin().getRight().get(width);
+                b.x0 = b.x0 - cWidth;
                 break;
             }
 
@@ -173,21 +173,21 @@ namespace floah
     // Elements.
     ////////////////////////////////////////////////////////////////
 
-    LayoutElement& HorizontalFlow::get(const size_t index) const
+    LayoutElement& VerticalFlow::get(const size_t index) const
     {
         if (index >= children.size()) throw FloahError("Cannot get element. Index is out of range.");
 
         return *children[index];
     }
 
-    void HorizontalFlow::remove(const size_t index)
+    void VerticalFlow::remove(const size_t index)
     {
         if (index >= children.size()) throw FloahError("Cannot remove element. Index is out of range.");
 
         children.erase(children.begin() + index);
     }
 
-    LayoutElementPtr HorizontalFlow::extract(const size_t index)
+    LayoutElementPtr VerticalFlow::extract(const size_t index)
     {
         if (index >= children.size()) throw FloahError("Cannot extract element. Index is out of range.");
 
@@ -197,15 +197,15 @@ namespace floah
         return elem;
     }
 
-    void HorizontalFlow::appendImpl(LayoutElementPtr elem)
+    void VerticalFlow::appendImpl(LayoutElementPtr elem)
     {
         makeChild(*elem);
         children.push_back(std::move(elem));
     }
 
-    void HorizontalFlow::prependImpl(LayoutElementPtr elem) { insertImpl(std::move(elem), 0); }
+    void VerticalFlow::prependImpl(LayoutElementPtr elem) { insertImpl(std::move(elem), 0); }
 
-    void HorizontalFlow::insertImpl(LayoutElementPtr elem, const size_t index)
+    void VerticalFlow::insertImpl(LayoutElementPtr elem, const size_t index)
     {
         makeChild(*elem);
         children.insert(children.begin() + std::min(children.size(), index), std::move(elem));
